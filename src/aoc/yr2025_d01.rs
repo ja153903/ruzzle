@@ -20,10 +20,6 @@ impl Solver {
         let direction = line.chars().next().ok_or_else(|| anyhow!("Empty line"))?;
         let clicks = line[1..].parse::<i32>()?;
 
-        if clicks < 0 {
-            return Err(anyhow!("Clicks must be non-negative"));
-        }
-
         Ok((direction, clicks))
     }
 
