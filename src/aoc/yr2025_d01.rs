@@ -13,7 +13,7 @@ impl Solver {
     }
 
     fn readlines() -> Vec<&'static str> {
-        Solver::read().lines().collect()
+        Self::read().lines().collect()
     }
 
     fn parse_instruction(line: &str) -> anyhow::Result<(char, i32)> {
@@ -27,9 +27,9 @@ impl Solver {
         let mut point = STARTING_POSITION;
         let mut result = 0;
 
-        let lines = Solver::readlines();
+        let lines = Self::readlines();
         for line in lines.iter() {
-            match Solver::parse_instruction(line) {
+            match Self::parse_instruction(line) {
                 Ok((direction, clicks)) => match direction {
                     'L' => {
                         point = (point - clicks + POSITIONS_IN_CIRCLE) % POSITIONS_IN_CIRCLE;
@@ -56,9 +56,9 @@ impl Solver {
         let mut point = STARTING_POSITION;
         let mut result = 0;
 
-        let lines = Solver::readlines();
+        let lines = Self::readlines();
         for line in lines.iter() {
-            match Solver::parse_instruction(line) {
+            match Self::parse_instruction(line) {
                 Ok((direction, clicks)) => {
                     let full_rotations = clicks / POSITIONS_IN_CIRCLE;
                     let remaining_clicks = clicks % POSITIONS_IN_CIRCLE;
