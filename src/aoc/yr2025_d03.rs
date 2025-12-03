@@ -86,24 +86,10 @@ impl Solver {
                     largest_items.push_back(ch);
                 });
 
-                while largest_items.len() != 12 {
-                    largest_items.pop_back();
-                }
+                largest_items.truncate(12);
 
-                let mut chars: Vec<char> = Vec::new();
-                while !largest_items.is_empty() {
-                    let front = largest_items.pop_front();
-                    if let Some(front) = front {
-                        chars.push(front);
-                    }
-                }
-
-                let combined: String = chars.into_iter().collect();
-                if let Ok(parsed) = combined.parse::<i64>() {
-                    return parsed;
-                }
-
-                0
+                let combined: String = largest_items.into_iter().collect();
+                combined.parse::<i64>().unwrap_or(0)
             })
             .sum())
     }
