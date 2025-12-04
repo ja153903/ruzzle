@@ -16,6 +16,7 @@ impl Solver {
             .collect()
     }
 
+    // NOTE: Here's a template we can use for more neighbor related problems in the future
     const DIRECTIONS: [(i32, i32); 8] = [
         (-1, -1),
         (-1, 0),
