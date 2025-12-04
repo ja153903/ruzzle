@@ -1,3 +1,4 @@
+pub mod grid;
 pub mod template;
 pub mod yr2015_d01;
 pub mod yr2015_d02;

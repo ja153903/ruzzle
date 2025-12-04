@@ -2,6 +2,8 @@
 
 use anyhow::anyhow;
 
+use crate::aoc::grid;
+
 struct Solver;
 
 impl Solver {
@@ -14,36 +16,6 @@ impl Solver {
             .lines()
             .map(|line| line.chars().collect::<Vec<char>>())
             .collect()
-    }
-
-    // NOTE: Here's a template we can use for more neighbor related problems in the future
-    const DIRECTIONS: [(i32, i32); 8] = [
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-        (0, -1),
-        (0, 1),
-        (1, -1),
-        (1, 0),
-        (1, 1),
-    ];
-
-    fn count_neighbors(grid: &[Vec<char>], row: usize, col: usize, target: char) -> usize {
-        let rows = grid.len() as i32;
-        let cols = grid[0].len() as i32;
-        let (r, c) = (row as i32, col as i32);
-
-        Self::DIRECTIONS
-            .iter()
-            .filter(|(dr, dc)| {
-                let (nr, nc) = (r + dr, c + dc);
-                nr >= 0
-                    && nr < rows
-                    && nc >= 0
-                    && nc < cols
-                    && grid[nr as usize][nc as usize] == target
-            })
-            .count()
     }
 
     fn part1() -> anyhow::Result<i32> {
@@ -59,7 +31,7 @@ impl Solver {
         for row in 0..rows {
             for col in 0..cols {
                 if grid[row][col] == '@' {
-                    let neighbor_count = Self::count_neighbors(&grid, row, col, '@');
+                    let neighbor_count = grid::count_neighbors(&grid, row, col, '@', true);
                     if neighbor_count < 4 {
                         count += 1;
                     }
@@ -86,7 +58,7 @@ impl Solver {
             for row in 0..rows {
                 for col in 0..cols {
                     if grid[row][col] == '@' {
-                        let neighbor_count = Self::count_neighbors(&grid, row, col, '@');
+                        let neighbor_count = grid::count_neighbors(&grid, row, col, '@', true);
                         if neighbor_count < 4 {
                             grid[row][col] = '.';
                             total_removed += 1;
