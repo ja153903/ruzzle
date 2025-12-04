@@ -15,118 +15,92 @@ impl Solver {
             .map(|line| line.chars().collect::<Vec<char>>())
             .collect()
     }
+
+    const DIRECTIONS: [(i32, i32); 8] = [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ];
+
+    fn count_neighbors(grid: &[Vec<char>], row: usize, col: usize, target: char) -> usize {
+        let rows = grid.len() as i32;
+        let cols = grid[0].len() as i32;
+        let (r, c) = (row as i32, col as i32);
+
+        Self::DIRECTIONS
+            .iter()
+            .filter(|(dr, dc)| {
+                let (nr, nc) = (r + dr, c + dc);
+                nr >= 0
+                    && nr < rows
+                    && nc >= 0
+                    && nc < cols
+                    && grid[nr as usize][nc as usize] == target
+            })
+            .count()
+    }
+
     fn part1() -> anyhow::Result<i32> {
         let grid = Self::readlines();
+        if grid.is_empty() || grid[0].is_empty() {
+            return Err(anyhow!("Grid is empty"));
+        }
+
         let rows = grid.len();
         let cols = grid[0].len();
+        let mut count = 0;
 
-        let mut res = 0;
-
-        for i in 0..rows {
-            for j in 0..cols {
-                if grid[i][j] == '@' {
-                    let mut count = 0;
-
-                    // check the 8 directions
-                    if i > 0 && grid[i - 1][j] == '@' {
+        for row in 0..rows {
+            for col in 0..cols {
+                if grid[row][col] == '@' {
+                    let neighbor_count = Self::count_neighbors(&grid, row, col, '@');
+                    if neighbor_count < 4 {
                         count += 1;
-                    }
-                    if j > 0 && grid[i][j - 1] == '@' {
-                        count += 1;
-                    }
-                    if i < rows - 1 && grid[i + 1][j] == '@' {
-                        count += 1;
-                    }
-                    if j < cols - 1 && grid[i][j + 1] == '@' {
-                        count += 1;
-                    }
-
-                    // get diagonals as well
-                    if i > 0 && j > 0 && grid[i - 1][j - 1] == '@' {
-                        count += 1;
-                    }
-                    if i < rows - 1 && j < cols - 1 && grid[i + 1][j + 1] == '@' {
-                        count += 1;
-                    }
-
-                    if i > 0 && j < cols - 1 && grid[i - 1][j + 1] == '@' {
-                        count += 1;
-                    }
-
-                    if i < rows - 1 && j > 0 && grid[i + 1][j - 1] == '@' {
-                        count += 1;
-                    }
-
-                    if count < 4 {
-                        res += 1;
                     }
                 }
             }
         }
 
-        Ok(res)
+        Ok(count)
     }
 
     fn part2() -> anyhow::Result<i32> {
         let mut grid = Self::readlines();
+        if grid.is_empty() || grid[0].is_empty() {
+            return Err(anyhow!("Grid is empty"));
+        }
+
         let rows = grid.len();
         let cols = grid[0].len();
-
-        let mut res = 0;
+        let mut total_removed = 0;
 
         loop {
-            let mut has_mutated_state = false;
+            let mut changed = false;
 
-            for i in 0..rows {
-                for j in 0..cols {
-                    if grid[i][j] == '@' {
-                        let mut count = 0;
-
-                        // check the 8 directions
-                        if i > 0 && grid[i - 1][j] == '@' {
-                            count += 1;
-                        }
-                        if j > 0 && grid[i][j - 1] == '@' {
-                            count += 1;
-                        }
-                        if i < rows - 1 && grid[i + 1][j] == '@' {
-                            count += 1;
-                        }
-                        if j < cols - 1 && grid[i][j + 1] == '@' {
-                            count += 1;
-                        }
-
-                        // get diagonals as well
-                        if i > 0 && j > 0 && grid[i - 1][j - 1] == '@' {
-                            count += 1;
-                        }
-                        if i < rows - 1 && j < cols - 1 && grid[i + 1][j + 1] == '@' {
-                            count += 1;
-                        }
-
-                        if i > 0 && j < cols - 1 && grid[i - 1][j + 1] == '@' {
-                            count += 1;
-                        }
-
-                        if i < rows - 1 && j > 0 && grid[i + 1][j - 1] == '@' {
-                            count += 1;
-                        }
-
-                        if count < 4 {
-                            has_mutated_state = true;
-                            grid[i][j] = '.';
-                            res += 1;
+            for row in 0..rows {
+                for col in 0..cols {
+                    if grid[row][col] == '@' {
+                        let neighbor_count = Self::count_neighbors(&grid, row, col, '@');
+                        if neighbor_count < 4 {
+                            grid[row][col] = '.';
+                            total_removed += 1;
+                            changed = true;
                         }
                     }
                 }
             }
 
-            if !has_mutated_state {
+            if !changed {
                 break;
             }
         }
 
-        Ok(res)
+        Ok(total_removed)
     }
 }
 
