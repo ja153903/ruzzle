@@ -143,6 +143,6 @@ mod tests {
     #[test]
     pub fn test_part2() {
         let result = Solver::part2().expect("Part 2 should complete successfully");
-        assert_eq!(result, 0);
+        assert_eq!(result, 8277);
     }
 }
