@@ -42,19 +42,17 @@ impl Solver {
 
     fn merge_intervals(intervals: &mut [Vec<i64>]) -> Vec<Vec<i64>> {
         intervals.sort_by(|a, b| a[0].cmp(&b[0]));
-        let mut result: Vec<Vec<i64>> = Vec::new();
-
-        for interval in intervals.iter() {
-            if let Some(last) = result.last_mut()
-                && last[1] >= interval[0]
+        intervals.iter_mut().fold(Vec::new(), |mut acc, cur| {
+            if let Some(last) = acc.last_mut()
+                && last[1] >= cur[0]
             {
-                *last = vec![last[0].min(interval[0]), last[1].max(interval[1])];
+                *last = vec![last[0].min(cur[0]), last[1].max(cur[1])];
             } else {
-                result.push(interval.to_vec());
+                acc.push(cur.to_vec());
             }
-        }
 
-        result
+            acc
+        })
     }
 
     fn part1() -> anyhow::Result<i32> {
