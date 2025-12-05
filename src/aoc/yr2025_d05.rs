@@ -61,11 +61,11 @@ impl Solver {
         let intervals = Self::merge_intervals(&mut ranges);
 
         for &id in ids.iter() {
-            for interval in intervals.iter() {
-                if interval[0] <= id && id <= interval[1] {
-                    result += 1;
-                    break;
-                }
+            let in_range = intervals
+                .iter()
+                .find(|interval| interval[0] <= id && id <= interval[1]);
+            if in_range.is_some() {
+                result += 1;
             }
         }
 
@@ -73,15 +73,12 @@ impl Solver {
     }
 
     fn part2() -> anyhow::Result<i64> {
-        let mut result = 0;
         let (mut ranges, _ids) = Self::parse_ranges_from_ids()?;
         let intervals = Self::merge_intervals(&mut ranges);
 
-        for interval in intervals.iter() {
-            result += interval[1] - interval[0] + 1;
-        }
-
-        Ok(result)
+        Ok(intervals
+            .iter()
+            .fold(0, |acc, interval| acc + interval[1] - interval[0] + 1))
     }
 }
 
