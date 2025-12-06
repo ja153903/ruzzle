@@ -94,10 +94,10 @@ impl Solver {
         let mut total = 0;
         let mut groups = Vec::new();
 
-        let max_width = lines.iter().map(|line| line.len()).max().unwrap_or(0);
+        let cols = lines[0].len();
         let mut current_group = Vec::new();
 
-        for col_idx in (0..max_width).rev() {
+        for col_idx in (0..cols).rev() {
             let mut column_chars = String::new();
             let mut has_content = false;
 
