@@ -8,3 +8,4 @@ pub mod yr2025_d02;
 pub mod yr2025_d03;
 pub mod yr2025_d04;
 pub mod yr2025_d05;
+pub mod yr2025_d06;
