@@ -19,6 +19,7 @@ impl Solver {
             .collect()
     }
 
+    // NOTE: BFS example
     fn part1() -> anyhow::Result<i32> {
         let grid = Self::readlines();
         let mut visited: HashSet<(i32, i32)> = HashSet::new();
@@ -73,6 +74,7 @@ impl Solver {
         Ok(result)
     }
 
+    // NOTE: DFS example
     fn part2() -> anyhow::Result<i64> {
         let grid = Self::readlines();
         let start_col = grid[0]
